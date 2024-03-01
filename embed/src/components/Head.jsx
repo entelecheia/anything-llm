@@ -164,7 +164,7 @@ const customCss = `
 export default function Head() {
   return (
     <head>
-      {/* <style>{hljsCss}</style> */}
+      <style>{hljsCss}</style>
       <style>{customCss}</style>
     </head>
   );
