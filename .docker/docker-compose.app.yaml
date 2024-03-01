@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  # Defines a service name
+  app:
+    # Sets the image name for the built image
+    image: $IMAGE_NAME:$IMAGE_TAG
+    build:
+      # Sets the build context to the current directory
+      context: .
+      # Specifies the Dockerfile to use for the build
+      dockerfile: .docker/Dockerfile
+      args:
+        ARG_UID: ${CONTAINER_USER_UID:-1000}
+        ARG_GID: ${CONTAINER_USER_UID:-1000}
+    container_name: $CONTAINER_NAME
+    pull_policy: always
+    restart: unless-stopped
+    user: "$CONTAINER_USER_UID:$CONTAINER_USER_UID"
+    cap_add:
+      - SYS_ADMIN
+    # Sets the hostname of the container
+    hostname: $CONTAINER_HOSTNAME
+    ports:
+      - "$HOST_WEB_SVC_PORT:$CONTAINER_WEB_SVC_PORT"
+    volumes:
+      # Maps directories from the host to the container
+      - "$HOST_STORAGE_DIR:$CONTAINER_STORAGE_DIR"
+      - "$HOST_EMBED_DIR:$CONTAINER_EMBED_DIR"
+      - "$HOST_ENV_FILE:$CONTAINER_ENV_FILE"
+    # set the environment variables
+    environment:
+      STORAGE_DIR: $CONTAINER_STORAGE_DIR
+      DISABLE_TELEMETRY: true
+networks:
+  default:
+    # Sets the name of the default network and makes it external
+    name: $CONTAINER_NETWORK_NAME
+    external: true

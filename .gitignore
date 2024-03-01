@@ -1,3 +1,6 @@
+.env.secret
+workspace/
+
 v-env
 .env
 !.env.example
